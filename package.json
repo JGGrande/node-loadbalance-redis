@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev:server": "tsx watch src/shared/infra/server.ts",
-    "start": "npx prisma generate && npx prisma migrate deploy && yarn tsup src --out-dir build && node build/shared/infra/server.js",
+    "start": "npx prisma generate && npx prisma migrate deploy && yarn tsup src --out-dir build && pm2 start build/shared/infra/server.js",
     "build": "tsup src --out-dir build"
   },
   "prisma": {

@@ -1,6 +1,8 @@
 FROM node:18.15.0
 RUN apt-get update -y
 
+RUN npm install -g pm2 --force
+
 RUN npm install -g yarn --force
 
 WORKDIR /home/root/app

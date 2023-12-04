@@ -11,6 +11,11 @@ app.use(express.json({ limit: '5mb'}));
 
 app.use(routes);
 
+app.get('/', (request: Request, response: Response) => {
+  console.log(process.pid)
+  return response.end(process.ppid.toString())
+})
+
 app.use((err: Error, request: Request, response: Response, next: NextFunction) => {
 
     if (err instanceof AppError) {
