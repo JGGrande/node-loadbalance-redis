@@ -4,39 +4,59 @@ import 'express-async-errors';
 import AppError from "../errors/AppError";
 import { env } from "../env/index"
 import { routes } from './routes';
+import cluster from "cluster";
+import { cpus } from "os";
 
-const app = express()
+const numberOfCPUs = cpus().length;
 
-app.use(express.json({ limit: '5mb'}));
+if(cluster.isPrimary){
+  console.log(`Processo principal criado: ${process.pid.toString()}`)
 
-app.use(routes);
+  for(let i = 0; i < numberOfCPUs; i++){
+    console.log(`Criado processo filho: ${i}...`)
+    cluster.fork()
+  }
 
-app.get('/', (request: Request, response: Response) => {
-  console.log(process.pid)
-  return response.end(process.ppid.toString())
-})
+  cluster.on('exit', (worker, code, signal) => {
+    console.log(`Processo ${worker.process.pid?.toString()} finalizado`)
+    cluster.fork();
+  });
 
-app.use((err: Error, request: Request, response: Response, next: NextFunction) => {
+}else {
 
-    if (err instanceof AppError) {
-        return response.status(err.statusCode).json({
-            status: 'error',
-            message: err.message,
-        });
-    }
+  const app = express()
 
-    if (env.NODE_ENV != 'production') {
-        console.error(err)
-    } else {
-        //colocar para enviar logs para Datadog,NewRelic ou Sentry
-    }
+  app.use(express.json({ limit: '5mb'}));
 
-    return response.status(500).send({ message: 'Erro interno no servidor.' })
-},
-);
+  app.use(routes);
 
-
-app.listen(env.PORT, () => {
+  app.get('/', (request: Request, response: Response) => {
     console.log(process.pid)
-    console.log(`Server is running on port ------>>>>>> ${env.PORT}`)
-})
+    return response.end(process.ppid.toString())
+  })
+
+  app.use((err: Error, request: Request, response: Response, next: NextFunction) => {
+
+      if (err instanceof AppError) {
+          return response.status(err.statusCode).json({
+              status: 'error',
+              message: err.message,
+          });
+      }
+
+      if (env.NODE_ENV != 'production') {
+          console.error(err)
+      } else {
+          //colocar para enviar logs para Datadog,NewRelic ou Sentry
+      }
+
+      return response.status(500).send({ message: 'Erro interno no servidor.' })
+  },
+  );
+
+
+  app.listen(env.PORT, () => {
+      console.log(process.pid)
+      console.log(`Server is running on port ------>>>>>> ${env.PORT}`)
+  })
+}
