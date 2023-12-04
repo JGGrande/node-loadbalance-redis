@@ -13,7 +13,7 @@ export class UserController {
 
     const loginUserService = userContainer.resolve(LoginUserService);
 
-    const user = loginUserService.execute(login, password)
+    const user = await loginUserService.execute(login, password)
 
     return response.json(user)
   }
