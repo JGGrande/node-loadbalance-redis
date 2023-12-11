@@ -9,7 +9,7 @@
     "dev:server": "tsx watch src/shared/infra/server.ts",
     "start": "npx prisma generate && npx prisma migrate deploy && yarn tsup src --out-dir build && node build/shared/infra/server.js",
     "build": "tsup src --out-dir build",
-    "test": "npx autocannon -c 500 -d 30 --workers 10 --renderStatusCodes --latency --warmup [-c 2 -d 4] localhost"
+    "test": "npx autocannon -c 500 -d 60 --workers 10 --renderStatusCodes --latency --warmup [-c 2 -d 4] localhost/user"
   },
   "prisma": {
     "schema": "./prisma/schema.prisma"
