@@ -1,6 +1,7 @@
 import { inject, injectable } from "inversify";
 import crypto from "crypto"
 import { type IUserRepository } from "@modules/user/domain/repositories/user/IUserRepository";
+import AppError from "@shared/errors/AppError";
 
 interface IRequest{
   login: string;
@@ -20,6 +21,12 @@ export class CreateUserService {
   }
 
   async execute({ login, name, password }:IRequest){
+
+    const userAlreadyExists = await this.userRepository.findByLogin(login);
+
+    if(userAlreadyExists){
+      throw new AppError("User already exists", 409);
+    }
 
     const crypted = crypto.createHash('sha256')
     crypted.update(password)
