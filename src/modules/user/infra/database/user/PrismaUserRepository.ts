@@ -1,3 +1,4 @@
+import { ICreateUserDTO } from "@modules/user/application/dtos/user/ICreateUserDTO";
 import { User } from "@modules/user/domain/models/user/User";
 import { IUserRepository } from "@modules/user/domain/repositories/user/IUserRepository";
 import { PrismaClient } from "@prisma/client";
@@ -32,6 +33,26 @@ export class PrismaUserRepository implements IUserRepository {
     })
 
     return user;
+  }
+
+  async create({ login, name, password }: ICreateUserDTO): Promise<User> {
+    const userData = await this.prisma.user.create({
+      data: {
+        login,
+        name,
+        password
+      }
+    })
+
+    const user = new User({
+      id: userData.id,
+      login: userData.login,
+      name: userData.name,
+      password: userData.password
+    })
+
+    return user;
+
   }
 
 }
