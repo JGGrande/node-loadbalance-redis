@@ -63,4 +63,9 @@ export class PrismaUserRepository implements IUserRepository {
     return users;
   }
 
+  async count(): Promise<number> {
+    const userCount = await this.prisma.user.count();
+    return userCount
+  }
+
 }

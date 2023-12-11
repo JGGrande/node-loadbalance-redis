@@ -1,3 +1,4 @@
+import { CountUserService } from "@modules/user/application/services/user/CountUserService";
 import { CreateUserService } from "@modules/user/application/services/user/CreateUserService";
 import { GetAllUserService } from "@modules/user/application/services/user/GetAllUserService";
 import { LoginUserService } from "@modules/user/application/services/user/LoginUserService";
@@ -48,7 +49,12 @@ export class UserController {
   }
 
   public async count(request: Request, response: Response): Promise<Response>{
-    return response.json();
+
+    const countUserService = userContainer.resolve(CountUserService)
+
+    const countUser = await countUserService.execute();
+
+    return response.json({ users: countUser});
   }
 
 }
