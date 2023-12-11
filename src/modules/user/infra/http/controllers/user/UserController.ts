@@ -1,4 +1,5 @@
 import { CreateUserService } from "@modules/user/application/services/user/CreateUserService";
+import { GetAllUserService } from "@modules/user/application/services/user/GetAllUserService";
 import { LoginUserService } from "@modules/user/application/services/user/LoginUserService";
 import { userContainer } from "@modules/user/infra/di/user/container";
 import { Request, Response } from "express";
@@ -39,9 +40,11 @@ export class UserController {
     return response.json(user)
   }
   public async getAll(request: Request, response: Response): Promise<Response>{
+    const getAllUserService = userContainer.resolve(GetAllUserService)
 
+    const users = await getAllUserService.execute();
 
-    return response.json()
+    return response.json(users);
   }
 
   public async count(request: Request, response: Response): Promise<Response>{
