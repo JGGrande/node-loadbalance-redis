@@ -59,39 +59,3 @@ if(cluster.isPrimary){
       console.log(`Server is running on port ------>>>>>> ${env.PORT}`)
   })
 }
-
-// const app = express()
-
-// app.use(express.json({ limit: '5mb'}));
-
-// app.use(routes);
-
-// app.get('/', (request: Request, response: Response) => {
-//   console.log(process.pid)
-//   return response.json({pid: process.pid.toString(), hostname: hostname() })
-// })
-
-// app.use((err: Error, request: Request, response: Response, next: NextFunction) => {
-
-//     if (err instanceof AppError) {
-//         return response.status(err.statusCode).json({
-//             status: 'error',
-//             message: err.message,
-//         });
-//     }
-
-//     if (env.NODE_ENV != 'production') {
-//         console.error(err)
-//     } else {
-//         //colocar para enviar logs para Datadog,NewRelic ou Sentry
-//     }
-
-//     return response.status(500).send({ message: 'Erro interno no servidor.' })
-// },
-// );
-
-
-// app.listen(env.PORT, () => {
-//     console.log(process.pid)
-//     console.log(`Server is running on port ------>>>>>> ${env.PORT}`)
-// })
