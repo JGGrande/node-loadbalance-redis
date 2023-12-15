@@ -1,6 +1,7 @@
 import "reflect-metadata"
 import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
+import "./redis/index";
 import AppError from "../errors/AppError";
 import { env } from "../env/index"
 import { routes } from './routes';

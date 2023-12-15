@@ -1,8 +1,9 @@
 import { CountUserService } from "@modules/user/application/services/user/CountUserService";
-import { CreateUserService } from "@modules/user/application/services/user/CreateUserService";
 import { GetAllUserService } from "@modules/user/application/services/user/GetAllUserService";
 import { LoginUserService } from "@modules/user/application/services/user/LoginUserService";
 import { userContainer } from "@modules/user/infra/di/user/container";
+import RedisPublisher from "@shared/infra/redis";
+
 import { Request, Response } from "express";
 
 export class UserController {
@@ -18,12 +19,11 @@ export class UserController {
 
     if(password.length < 1 || password.length > 100) return response.status(400).json({ message: "Password can contain up to 100 characters." });
 
-
-    const createUserService = userContainer.resolve(CreateUserService)
-
-    const user = await createUserService.execute({ name, login, password})
-
-    return response.json(user)
+    const queue = new RedisPublisher();
+    console.log("Indo publicar na fila")
+    await queue.publishToQueue("create-user", { name, login, password });
+    console.log("Terminou de publicar na fila")
+    return response.json({ message: "Async job created"});
 
   }
 
