@@ -5,14 +5,14 @@ import AppError from "../errors/AppError";
 import { env } from "../env/index"
 import { routes } from './routes';
 import cluster from "cluster";
-import { cpus, hostname } from "os";
+import { hostname } from "os";
 
-const numberOfCPUs = cpus().length;
+const numberofClusters = env.NUMBER_CLUSTER ? +env.NUMBER_CLUSTER : 1;
 
 if(cluster.isPrimary){
   console.log(`Processo principal criado: ${process.pid.toString()}`)
 
-  for(let i = 0; i < numberOfCPUs; i++){
+  for(let i = 1; i <= numberofClusters; i++){
     console.log(`Criado processo filho: ${i}...`)
     cluster.fork()
   }

@@ -12,6 +12,7 @@ services:
     environment:
       NODE_ENV: homologation
       PORT: 3333
+      NUMBER_CLUSTER: 8
       DATABASE_URL: postgresql://postgres:1234@postgres:5432/example-db?schema=public&connection_limit=400&pool_timeout=20
 
     networks:
