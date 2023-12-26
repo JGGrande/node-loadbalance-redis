@@ -8,14 +8,12 @@ services:
       - redis
     volumes:
       - .:/home/root/app
-    # ports:
-    #   - 3333:3333
     environment:
       NODE_ENV: homologation
-      REDIS_URL: redis://redis:6379
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
       PORT: 3333
       DATABASE_URL: postgresql://postgres:1234@postgres:5432/example-db?schema=public&connection_limit=400&pool_timeout=20
-
     networks:
       - backbone
 

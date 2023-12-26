@@ -1,20 +1,17 @@
-import redisConfig from "@config/redisConfig";
 import Bull from "bull";
 
 export class RedisConsumer {
-  constructor(private queueName: string) { }
+  constructor(private queue: Bull.Queue) { }
 
   async startConsuming(onMessageReceived: (message: any) => void ): Promise<void> {
-    const queue = new Bull(this.queueName, redisConfig);
-    queue.process( job => {
-      console.log(`Aguardando mensagens da ${this.queueName}. To exit, press CTRL+C`);
-
+    const queue = this.queue
+    queue.process( (job, done) => {
       const msg = job.data
 
       if(msg){
         onMessageReceived(msg);
       }
-
+      done();
     })
   }
 }

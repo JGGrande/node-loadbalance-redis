@@ -1,8 +1,10 @@
+import redisConfig from "@config/redisConfig";
 import { CountUserService } from "@modules/user/application/services/user/CountUserService";
 import { GetAllUserService } from "@modules/user/application/services/user/GetAllUserService";
 import { LoginUserService } from "@modules/user/application/services/user/LoginUserService";
 import { userContainer } from "@modules/user/infra/di/user/container";
-import RedisPublisher from "@shared/infra/redis";
+import { publishQueueCreateUser } from "@shared/infra/redis";
+import Bull from "bull";
 
 import { Request, Response } from "express";
 
@@ -19,10 +21,8 @@ export class UserController {
 
     if(password.length < 1 || password.length > 100) return response.status(400).json({ message: "Password can contain up to 100 characters." });
 
-    const queue = new RedisPublisher();
-    console.log("Indo publicar na fila")
-    await queue.publishToQueue("create-user", { name, login, password });
-    console.log("Terminou de publicar na fila")
+    await publishQueueCreateUser.publishToQueue({name, login, password});
+
     return response.json({ message: "Async job created"});
 
   }

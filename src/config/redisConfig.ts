@@ -1,5 +1,8 @@
 import { env } from "@shared/env";
 
 export default {
-  redis: env.REDIS_URL
+  redis: {
+    host: env.REDIS_HOST,
+    port: +env.REDIS_PORT!
+  }
 }

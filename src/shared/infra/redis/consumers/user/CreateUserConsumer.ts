@@ -5,7 +5,7 @@ export async function handleReceivedMessageCreateUserQueue(message: any){
 
   const createaUserService = userContainer.resolve(CreateUserService);
 
-  const data = JSON.parse(message);
+  const data = message
 
   try{
     await createaUserService.execute(data);

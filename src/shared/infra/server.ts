@@ -6,9 +6,11 @@ import AppError from "../errors/AppError";
 import { env } from "../env/index"
 import { routes } from './routes';
 import cluster from "cluster";
-import { cpus, hostname } from "os";
+import { cpus } from "os";
 
 const numberOfCPUs = cpus().length;
+
+
 
 if(cluster.isPrimary){
   console.log(`Processo principal criado: ${process.pid.toString()}`)
@@ -24,17 +26,11 @@ if(cluster.isPrimary){
   });
 
 }else {
-
   const app = express()
 
   app.use(express.json({ limit: '5mb'}));
 
   app.use(routes);
-
-  app.get('/', (request: Request, response: Response) => {
-    console.log(process.pid)
-    return response.json({pid: process.pid.toString(), hostname: hostname() })
-  })
 
   app.use((err: Error, request: Request, response: Response, next: NextFunction) => {
 
@@ -56,7 +52,6 @@ if(cluster.isPrimary){
 
 
   app.listen(env.PORT, () => {
-      console.log(process.pid)
       console.log(`Server is running on port ------>>>>>> ${env.PORT}`)
   })
 }
