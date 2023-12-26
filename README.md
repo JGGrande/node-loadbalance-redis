@@ -30,10 +30,10 @@ Este projeto é uma estrutura de API escalável e poderosa que utiliza conceitos
 
 ## Testes
 
-Para realizar testes de usuários simultâneos consultando o banco de dados, execute dentro do contâiner node:
+Para realizar testes de usuários simultâneos consultando o banco de dados, execute:
 
 ```bash
-yarn test
+npm run test
 ```
 
 ### Teste de Carga
