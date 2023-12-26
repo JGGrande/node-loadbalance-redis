@@ -33,7 +33,7 @@ Este projeto é uma estrutura de API escalável e poderosa que utiliza conceitos
 Para realizar testes de usuários simultâneos consultando o banco de dados, execute dentro do contâiner node:
 
 ```bash
-yarn dev:test
+yarn test
 ```
 
 ### Teste de Carga
